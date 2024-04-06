@@ -133,7 +133,8 @@ function(key, gamep)
     if gamep then
         return
     end
-    if key.KeyCode.Name:lower() == Keybind:lower() and CanInvis and RealCharacter and FakeCharacter then
+    if key.KeyCode.Name:lower() == Keybind:lower()kay."})
+ and CanInvis and RealCharacter and FakeCharacter then
         if RealCharacter:FindFirstChild("HumanoidRootPart") and FakeCharacter:FindFirstChild("HumanoidRootPart") then
             Invisible()
         end
@@ -144,3 +145,60 @@ local Sound = Instance.new("Sound",game:GetService("SoundService"))
 Sound.SoundId = "rbxassetid://232127604"
 Sound:Play()
 game:GetService("StarterGui"):SetCore("SendNotification",{["Title"] = "Invisible Toggle Loaded",["Text"] = "Press "..Keybind.." to become change visibility.",["Duration"] = 20,["Button1"] = "Okay."})
+
+-- GUI Integration --
+-- Create the GUI
+local gui = Instance.new("ScreenGui")
+gui.Name = "InvisibleGuiScript"
+gui.Parent = game.Players.LocalPlayer.PlayerGui
+
+-- Create the frame for the GUI
+local frame = Instance.new("Frame")
+frame.Name = "MainFrame"
+frame.Size = UDim2.new(0, 250, 0, 100)
+frame.Position = UDim2.new(0.5, -125, 0.5, -75)
+frame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+frame.BorderSizePixel = 0
+frame.Parent = gui
+
+-- Create the title textbox
+local title = Instance.new("TextBox")
+title.Name = "Title"
+title.Size = UDim2.new(1, 0, 0, 30)
+title.Position = UDim2.new(0, 0, 0, 0)
+title.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+title.BorderSizePixel = 0
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.Text = "Invisible Gui Script"
+title.Font = Enum.Font.SourceSans
+title.TextSize = 18
+title.TextWrapped = true
+title.TextXAlignment = Enum.TextXAlignment.Center
+title.Parent = frame
+
+-- Create the toggle button
+local toggleButton = Instance.new("TextButton")
+toggleButton.Name = "ToggleButton"
+toggleButton.Size = UDim2.new(0, 200, 0, 50)
+toggleButton.Position = UDim2.new(0.5, -100, 1, -60)
+toggleButton.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+toggleButton.BorderSizePixel = 0
+toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggleButton.Text = "Invisible [Disabled]"
+toggleButton.Font = Enum.Font.SourceSans
+toggleButton.TextSize = 18
+toggleButton.Parent = frame
+
+-- Function to toggle invisibility
+local function ToggleInvisibility()
+    if IsInvisible then
+        Invisible()
+        toggleButton.Text = "Invisible [Disabled]"
+    else
+        Invisible()
+        toggleButton.Text = "Invisible [Enabled]"
+    end
+end
+
+-- Connect toggle button to function
+toggleButton.MouseButton1Click:Connect(ToggleInvisibility)
