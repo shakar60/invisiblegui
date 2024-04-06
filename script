@@ -1,4 +1,4 @@
---Settings: [make it a loadstring for it to work on mobile or else it will crash]
+-- Settings: [make it a loadstring for it to work on mobile or else it will crash]
 local ScriptStarted = false
 local Keybind = "Q"
 local Transparency = true
@@ -144,3 +144,32 @@ local Sound = Instance.new("Sound",game:GetService("SoundService"))
 Sound.SoundId = "rbxassetid://232127604"
 Sound:Play()
 game:GetService("StarterGui"):SetCore("SendNotification",{["Title"] = "Invisible Toggle Loaded",["Text"] = "Press "..Keybind.." to become change visibility.",["Duration"] = 20,["Button1"] = "Okay."})
+
+-- GUI Integration --
+-- Create the GUI
+local gui = Instance.new("ScreenGui")
+gui.Name = "InvisibleGui"
+gui.Parent = game.Players.LocalPlayer.PlayerGui
+
+-- Create the frame for the GUI
+local frame = Instance.new("Frame")
+frame.Name = "MainFrame"
+frame.Size = UDim2.new(0, 250, 0, 100)
+frame.Position = UDim2.new(0.5, -125, 0.5, -75)
+frame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+frame.BorderSizePixel = 0
+frame.Parent = gui
+
+-- Create the title textbox
+local title = Instance.new("TextBox")
+title.Name = "Title"
+title.Size = UDim2.new(1, 0, 0, 30)
+title.Position = UDim2.new(0, 0, 0, 0)
+title.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+title.BorderSizePixel = 0
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.Text = "Invisible Script Gui"
+title.Font = Enum.Font.SourceSans
+title.TextSize = 18
+title.TextWrapped = true
+title.TextXAlignment = Enum.TextXAlignment.Center
