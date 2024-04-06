@@ -144,34 +144,3 @@ local Sound = Instance.new("Sound",game:GetService("SoundService"))
 Sound.SoundId = "rbxassetid://232127604"
 Sound:Play()
 game:GetService("StarterGui"):SetCore("SendNotification",{["Title"] = "Invisible Toggle Loaded",["Text"] = "Press "..Keybind.." to become change visibility.",["Duration"] = 20,["Button1"] = "Okay."})
-
--- Tool creation
-local tool = Instance.new("Tool")
-tool.Name = "Invisible Tool"
-tool.RequiresHandle = false
-tool.Parent = Player.Backpack
-
-local handle = Instance.new("Part")
-handle.Name = "Handle"
-handle.Size = Vector3.new(1, 1, 1)
-handle.Anchored = true
-handle.Transparency = 1
-handle.Parent = tool
-
-tool.Equipped:Connect(function()
-    tool.Grip = CFrame.new(Vector3.new()) -- Reset the grip
-    Invisible() -- Make the player invisible
-    wait(0.5) -- Wait for a short moment to ensure the tool is unequipped
-    tool.Parent = nil -- Remove the tool from the player's backpack
-end)
-
-tool.Activated:Connect(function()
-    tool:Destroy() -- Destroy the tool when clicked
-end)
-
--- Update the tool name based on invisibility status
-local function updateToolName()
-    tool.Name = IsInvisible and "Invisible [Enabled]" or "Invisible [Disabled]"
-end
-
-updateToolName()
