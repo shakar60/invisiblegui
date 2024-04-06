@@ -1,204 +1,75 @@
---Settings: [make it a loadstring for it to work on mobile or else it will crash]
-local ScriptStarted = false
-local Keybind = "Q"
-local Transparency = true
-local NoClip = false
-
-local Player = game:GetService("Players").LocalPlayer
-local RealCharacter = Player.Character or Player.CharacterAdded:Wait()
-
-local IsInvisible = false
-
-RealCharacter.Archivable = true
-local FakeCharacter = RealCharacter:Clone()
-local Part
-Part = Instance.new("Part", workspace)
-Part.Anchored = true
-Part.Size = Vector3.new(200, 1, 200)
-Part.CFrame = CFrame.new(0, -500, 0) --Set this to whatever you want, just far away from the map.
-Part.CanCollide = true
-FakeCharacter.Parent = workspace
-FakeCharacter.HumanoidRootPart.CFrame = Part.CFrame * CFrame.new(0, 5, 0)
-
-for i, v in pairs(RealCharacter:GetChildren()) do
-    if v:IsA("LocalScript") then
-        local clone = v:Clone()
-        clone.Disabled = true
-        clone.Parent = FakeCharacter
-    end
-end
-if Transparency then
-    for i, v in pairs(FakeCharacter:GetDescendants()) do
-        if v:IsA("BasePart") then
-            v.Transparency = 0.7
-        end
-    end
-end
-local CanInvis = true
-function RealCharacterDied()
-    CanInvis = false
-    RealCharacter:Destroy()
-    RealCharacter = Player.Character
-    CanInvis = true
-    isinvisible = false
-    FakeCharacter:Destroy()
-    workspace.CurrentCamera.CameraSubject = RealCharacter.Humanoid
-
-    RealCharacter.Archivable = true
-    FakeCharacter = RealCharacter:Clone()
-    Part:Destroy()
-    Part = Instance.new("Part", workspace)
-    Part.Anchored = true
-    Part.Size = Vector3.new(200, 1, 200)
-    Part.CFrame = CFrame.new(9999, 9999, 9999) --Set this to whatever you want, just far away from the map.
-    Part.CanCollide = true
-    FakeCharacter.Parent = workspace
-    FakeCharacter.HumanoidRootPart.CFrame = Part.CFrame * CFrame.new(0, 5, 0)
-
-    for i, v in pairs(RealCharacter:GetChildren()) do
-        if v:IsA("LocalScript") then
-            local clone = v:Clone()
-            clone.Disabled = true
-            clone.Parent = FakeCharacter
-        end
-    end
-    if Transparency then
-        for i, v in pairs(FakeCharacter:GetDescendants()) do
-            if v:IsA("BasePart") then
-                v.Transparency = 0.7
-            end
-        end
-    end
-    RealCharacter.Humanoid.Died:Connect(function()
-    RealCharacter:Destroy()
-    FakeCharacter:Destroy()
-    end)
-    Player.CharacterAppearanceLoaded:Connect(RealCharacterDied)
-end
-RealCharacter.Humanoid.Died:Connect(function()
-RealCharacter:Destroy()
-FakeCharacter:Destroy()
-end)
-Player.CharacterAppearanceLoaded:Connect(RealCharacterDied)
-local PseudoAnchor
-game:GetService "RunService".RenderStepped:Connect(
-function()
-    if PseudoAnchor ~= nil then
-        PseudoAnchor.CFrame = Part.CFrame * CFrame.new(0, 5, 0)
-    end
-     if NoClip then
-    FakeCharacter.Humanoid:ChangeState(11)
-     end
-end
-)
-
-PseudoAnchor = FakeCharacter.HumanoidRootPart
-local function Invisible()
-if IsInvisible == false then
-    local StoredCF = RealCharacter.HumanoidRootPart.CFrame
-    RealCharacter.HumanoidRootPart.CFrame = FakeCharacter.HumanoidRootPart.CFrame
-    FakeCharacter.HumanoidRootPart.CFrame = StoredCF
-    RealCharacter.Humanoid:UnequipTools()
-    Player.Character = FakeCharacter
-    workspace.CurrentCamera.CameraSubject = FakeCharacter.Humanoid
-    PseudoAnchor = RealCharacter.HumanoidRootPart
-    for i, v in pairs(FakeCharacter:GetChildren()) do
-        if v:IsA("LocalScript") then
-            v.Disabled = false
-        end
-    end
-
-    IsInvisible = true
-else
-    local StoredCF = FakeCharacter.HumanoidRootPart.CFrame
-    FakeCharacter.HumanoidRootPart.CFrame = RealCharacter.HumanoidRootPart.CFrame
-   
-    RealCharacter.HumanoidRootPart.CFrame = StoredCF
-   
-    FakeCharacter.Humanoid:UnequipTools()
-    Player.Character = RealCharacter
-    workspace.CurrentCamera.CameraSubject = RealCharacter.Humanoid
-    PseudoAnchor = FakeCharacter.HumanoidRootPart
-    for i, v in pairs(FakeCharacter:GetChildren()) do
-        if v:IsA("LocalScript") then
-            v.Disabled = true
-        end
-    end
-    IsInvisible = false
-end
-end
-
-game:GetService("UserInputService").InputBegan:Connect(
-function(key, gamep)
-    if gamep then
-        return
-    end
-    if key.KeyCode.Name:lower() == Keybind:lower()kay."})
- and CanInvis and RealCharacter and FakeCharacter then
-        if RealCharacter:FindFirstChild("HumanoidRootPart") and FakeCharacter:FindFirstChild("HumanoidRootPart") then
-            Invisible()
-        end
-    end
-end
-)
-local Sound = Instance.new("Sound",game:GetService("SoundService"))
-Sound.SoundId = "rbxassetid://232127604"
-Sound:Play()
-game:GetService("StarterGui"):SetCore("SendNotification",{["Title"] = "Invisible Toggle Loaded",["Text"] = "Press "..Keybind.." to become change visibility.",["Duration"] = 20,["Button1"] = "Okay."})
-
--- GUI Integration --
--- Create the GUI
+-- Create the ScreenGui
 local gui = Instance.new("ScreenGui")
-gui.Name = "InvisibleGuiScript"
+gui.Name = "InvisibleScriptGui"
 gui.Parent = game.Players.LocalPlayer.PlayerGui
 
--- Create the frame for the GUI
-local frame = Instance.new("Frame")
-frame.Name = "MainFrame"
-frame.Size = UDim2.new(0, 250, 0, 100)
-frame.Position = UDim2.new(0.5, -125, 0.5, -75)
-frame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-frame.BorderSizePixel = 0
-frame.Parent = gui
+-- Create the main frame
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 200, 0, 180) -- Adjusted height
+mainFrame.Position = UDim2.new(0.5, -100, 0.5, -90) -- Adjusted position
+mainFrame.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+mainFrame.BorderSizePixel = 0
+mainFrame.Active = true
+mainFrame.Draggable = true
+mainFrame.Parent = gui
 
--- Create the title textbox
-local title = Instance.new("TextBox")
-title.Name = "Title"
-title.Size = UDim2.new(1, 0, 0, 30)
-title.Position = UDim2.new(0, 0, 0, 0)
-title.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-title.BorderSizePixel = 0
-title.TextColor3 = Color3.fromRGB(255, 255, 255)
-title.Text = "Invisible Gui Script"
-title.Font = Enum.Font.SourceSans
-title.TextSize = 18
-title.TextWrapped = true
-title.TextXAlignment = Enum.TextXAlignment.Center
-title.Parent = frame
+-- Create title label
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Name = "TitleLabel"
+titleLabel.Size = UDim2.new(1, 0, 0, 20)
+titleLabel.Position = UDim2.new(0, 0, 0, 0)
+titleLabel.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+titleLabel.BorderSizePixel = 0
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.Text = "Invisible Scripts"
+titleLabel.Font = Enum.Font.SourceSans
+titleLabel.TextSize = 16
+titleLabel.Parent = mainFrame
 
--- Create the toggle button
-local toggleButton = Instance.new("TextButton")
-toggleButton.Name = "ToggleButton"
-toggleButton.Size = UDim2.new(0, 200, 0, 50)
-toggleButton.Position = UDim2.new(0.5, -100, 1, -60)
-toggleButton.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
-toggleButton.BorderSizePixel = 0
-toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-toggleButton.Text = "Invisible [Disabled]"
-toggleButton.Font = Enum.Font.SourceSans
-toggleButton.TextSize = 18
-toggleButton.Parent = frame
+-- Define script URLs
+local scripts = {
+    ["Invisible Script V1"] = "https://pastebin.com/raw/AYtzGEPb",
+    ["Invisible Script V2"] = "https://raw.githubusercontent.com/0Ben1/fe./dbb6ce6f6cee4f7a5c9e20d7b88e83db2a93bf25/Invisible%20GUI",
+    ["Invisible Script V3"] = "https://gist.githubusercontent.com/skid123skidlol/cd0d2dce51b3f20ad1aac941da06a1a1/raw/f58b98cce7d51e53ade94e7bb460e4f24fb7e0ff/%257BFE%257D%2520Invisible%2520Tool%2520(can%2520hold%2520tools)"
+}
 
--- Function to toggle invisibility
-local function ToggleInvisibility()
-    if IsInvisible then
-        Invisible()
-        toggleButton.Text = "Invisible [Disabled]"
-    else
-        Invisible()
-        toggleButton.Text = "Invisible [Enabled]"
-    end
+-- Create buttons for each script
+local yOffset = 30  -- Initial vertical offset
+local orderedScripts = {"Invisible Script V1", "Invisible Script V2", "Invisible Script V3"}
+for _, name in ipairs(orderedScripts) do
+    local button = Instance.new("TextButton")
+    button.Name = "ScriptButton_"..name
+    button.Size = UDim2.new(0, 180, 0, 40)
+    button.Position = UDim2.new(0, 10, 0, yOffset)
+    button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+    button.BorderSizePixel = 0
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.Text = name
+    button.Font = Enum.Font.SourceSans
+    button.TextSize = 14
+    button.Parent = mainFrame
+
+    button.MouseButton1Click:Connect(function()
+        loadstring(game:HttpGet(scripts[name], true))()
+        print("Script Executed: "..name)
+    end)
+
+    yOffset = yOffset + 50  -- Increase vertical offset for next button
 end
 
--- Connect toggle button to function
-toggleButton.MouseButton1Click:Connect(ToggleInvisibility)
+-- Create close button
+local closeButton = Instance.new("TextButton")
+closeButton.Name = "CloseButton"
+closeButton.Size = UDim2.new(0, 20, 0, 20)
+closeButton.Position = UDim2.new(1, -20, 0, 0)
+closeButton.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
+closeButton.BorderSizePixel = 0
+closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeButton.Text = "X"
+closeButton.Font = Enum.Font.SourceSans
+closeButton.TextSize = 14
+closeButton.Parent = titleLabel
+
+closeButton.MouseButton1Click:Connect(function()
+    gui:Destroy()
+end)
