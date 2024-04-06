@@ -1,4 +1,4 @@
---Settings:
+--Settings: [make it a loadstring for it to work on mobile or else it will crash]
 local ScriptStarted = false
 local Keybind = "Q"
 local Transparency = true
